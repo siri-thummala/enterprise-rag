@@ -1,0 +1,33 @@
+## Enterprise RAG Intelligence Hub
+An AI-powered Document Research Assistant built with Python, LangChain, and Google Gemini 2.5.
+
+## 🧠 Project Concept
+This project is a Retrieval-Augmented Generation (RAG) system. Unlike a standard chatbot that guesses answers, this system "reads" your specific PDF documents and uses them as a factual foundation to answer questions. It solves the problem of "AI Hallucinations" by forcing the model to cite your private data.
+
+## 🛠 The Tech Stack (The "Why")
+- Language Model: gemini-2.5-flash-lite — Chosen for its massive context window and high-speed reasoning.
+
+- Embeddings: text-embedding-004 — Converts human text into high-dimensional math (3,072 dimensions) so the AI can "calculate" the meaning of sentences.
+
+- Vector Database: ChromaDB — A high-performance "filing cabinet" that stores your PDF data in a searchable mathematical format.
+
+- Orchestration: LangChain — The framework that connects the PDF loader, the database, and the AI model into a single pipeline.
+
+## 🏗 System Architecture
+- The project is split into two distinct phases:
+
+## 1. The Ingestion Pipeline (ingest.py)
+
+- This is the "Learning Phase".
+- Load: Reads the raw PDF file.
+- Split: Breaks the text into 1,000-character chunks so the AI doesn't get overwhelmed.
+- Embed: Turns those chunks into vectors (numbers) using Google's embedding model.
+- Store: Saves those vectors into the ./chroma_db folder for permanent access.
+
+## 2. The Query Pipeline (query.py / app.py)
+
+- This is the "Answering Phase".
+- Search: When you ask a question, the system searches the ChromaDB for the most relevant text chunks.
+- Context: It grabs the specific paragraphs from your PDF that match your question.
+- Augment: It sends your question + the PDF paragraphs to Gemini.
+- Answer: Gemini reads the provided text and answers your question based only on that info.
