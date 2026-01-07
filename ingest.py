@@ -1,13 +1,14 @@
-import os
-from dotenv import load_dotenv
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_chroma import Chroma  # Updated from langchain_community.vectorstores
+def ingest_pdfs(pdf_folder):
+    import os
+    from dotenv import load_dotenv
+    from langchain_community.document_loaders import PyPDFLoader
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+    from langchain_google_genai import GoogleGenerativeAIEmbeddings
+    from langchain_chroma import Chroma  # Updated from langchain_community.vectorstores
 
-load_dotenv()
+    load_dotenv()
 
-def start_ingestion(pdf_folder):
+
     all_documents = []
     for file in os.listdir(pdf_folder):
         if file.endswith(".pdf"):

@@ -1,3 +1,5 @@
+import os
+from ingest import ingest_pdfs
 import streamlit as st
 from dotenv import load_dotenv
 
