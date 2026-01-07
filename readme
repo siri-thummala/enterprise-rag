@@ -87,7 +87,7 @@ enterprise-rag/
 
 - Source attribution
  * Each response includes the PDF name and page number
- * Improves transparency and trust
+ * Improves transparency and trust.
 
 - Streamlit UI
  * Upload PDFs directly from the browser
