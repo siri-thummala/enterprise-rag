@@ -13,7 +13,7 @@ This project is a Retrieval-Augmented Generation (RAG) system. Unlike a standard
 
 - Orchestration: LangChain — The framework that connects the PDF loader, the database, and the AI model into a single pipeline.
 
-## 🏗 System Architecture
+## 🏗 System 
 - The project is split into two distinct phases:
 
 ## 1. The Ingestion Pipeline (ingest.py)

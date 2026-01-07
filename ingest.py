@@ -7,12 +7,23 @@ from langchain_chroma import Chroma  # Updated from langchain_community.vectorst
 
 load_dotenv()
 
-def start_ingestion(pdf_path):
-    loader = PyPDFLoader(pdf_path)
-    pages = loader.load()
+def start_ingestion(pdf_folder):
+    all_documents = []
+    for file in os.listdir(pdf_folder):
+        if file.endswith(".pdf"):
+            pdf_path = os.path.join(pdf_folder, file)
+            loader = PyPDFLoader(pdf_path)
+            pages = loader.load()
+
+            for page in pages:
+                page.metadata["source"] = file
+                all_documents.append(page)
+
+    if not all_documents:
+        raise ValueError("No PDF files found in the folder.")
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-    chunks = text_splitter.split_documents(pages)
+    chunks = text_splitter.split_documents(all_documents)
 
     
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
@@ -26,5 +37,5 @@ def start_ingestion(pdf_path):
     print("--- Success! Database created in ./chroma_db ---")
 
 if __name__ == "__main__":
-    start_ingestion("test.pdf")
+    start_ingestion("./pdfs")
 
