@@ -2,9 +2,9 @@
 An AI-powered Document Research Assistant built with Python, LangChain, and Google Gemini 2.5.
 
 ## 🧠 Project Concept
-This project is a Retrieval-Augmented Generation (RAG) system. Unlike a standard chatbot that guesses answers, this system "reads" your specific PDF documents and uses them as a factual foundation to answer questions. It solves the problem of "AI Hallucinations" by forcing the model to cite your private data.
+ An end-to-end Retrieval-Augmented Generation (RAG) application that enables users to upload multiple PDF documents and ask natural-language questions over their content. The system performs semantic search using vector embeddings and generates grounded answers with source attribution via a Streamlit interface.It solves the problem of "AI Hallucinations" by forcing the model to cite your private data.
 
-## 🛠 The Tech Stack (The "Why")
+## 🛠 The Tech Stack 
 - Language Model: gemini-2.5-flash-lite — Chosen for its massive context window and high-speed reasoning.
 
 - Embeddings: text-embedding-004 — Converts human text into high-dimensional math (3,072 dimensions) so the AI can "calculate" the meaning of sentences.
@@ -24,10 +24,63 @@ This project is a Retrieval-Augmented Generation (RAG) system. Unlike a standard
 - Embed: Turns those chunks into vectors (numbers) using Google's embedding model.
 - Store: Saves those vectors into the ./chroma_db folder for permanent access.
 
-## 2. The Query Pipeline (query.py / app.py)
+## 2. The Query Pipeline (app.py)
 
 - This is the "Answering Phase".
 - Search: When you ask a question, the system searches the ChromaDB for the most relevant text chunks.
 - Context: It grabs the specific paragraphs from your PDF that match your question.
 - Augment: It sends your question + the PDF paragraphs to Gemini.
 - Answer: Gemini reads the provided text and answers your question based only on that info.
+
+## System Architecture
+
+PDFs
+ ↓
+Ingestion Pipeline (ingest.py)
+ ↓
+Vector Embeddings + Metadata
+ ↓
+ChromaDB (Persistent Vector Store)
+ ↓
+Streamlit UI (app.py)
+ ↓
+User Query → Retrieval → LLM → Answer + Sources
+
+## Project Structure
+enterprise-rag/
+│
+├── ingest.py            # Offline ingestion pipeline
+├── app.py               # Streamlit application
+├── check_setup.py       # Gemini API connectivity test
+│
+├── pdfs/                # Uploaded PDF documents
+│
+├── chroma_db/            # Persistent vector database
+│
+├── venv/                # Python virtual environment
+├── .env                 # API keys
+├── .gitignore
+└── README.md
+
+
+## 🚀 Features
+
+- Multi-PDF ingestion
+ Upload and index multiple PDF documents
+ Page-level parsing with chunking for accurate retrieval
+## Semantic search
+- Vector-based similarity search using Gemini embeddings
+- Persistent storage with ChromaDB
+## Retrieval-Augmented Generation
+- Relevant document chunks are retrieved and passed as context to the LLM
+- Answers are generated strictly from retrieved content
+## Source attribution
+- Each response includes the PDF name and page number
+- Improves transparency and trust
+## Streamlit UI
+- Upload PDFs directly from the browser
+- Ask questions interactively without restarting the app
+## Hallucination control
+- If the answer is not present in the retrieved context, the system responds with “I don’t know”
+
+## Setup Instructions
