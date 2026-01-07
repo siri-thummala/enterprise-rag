@@ -1,6 +1,5 @@
-import os
-from ingest import ingest_pdfs
 import streamlit as st
+import os
 from dotenv import load_dotenv
 
 from langchain_google_genai import (
@@ -8,6 +7,7 @@ from langchain_google_genai import (
     GoogleGenerativeAIEmbeddings
 )
 from langchain_chroma import Chroma
+from ingest import ingest_pdfs
 
 # Load environment variables
 load_dotenv()
@@ -21,6 +21,28 @@ st.set_page_config(
 
 st.title("📚 Enterprise RAG System")
 st.write("Ask questions over your PDFs using Retrieval-Augmented Generation.")
+
+st.subheader("📤 Upload a PDF")
+
+uploaded_file = st.file_uploader(
+    "Upload a PDF document",
+    type=["pdf"]
+)
+
+if uploaded_file is not None:
+    os.makedirs("pdfs", exist_ok=True)
+    pdf_path = os.path.join("pdfs", uploaded_file.name)
+
+    with open(pdf_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+    st.success(f"{uploaded_file.name} uploaded successfully!")
+
+    with st.spinner("Indexing document..."):
+        ingest_pdfs("pdfs")
+
+    st.success("Document indexed! You can now ask questions.")
+
 
 # Initialize embeddings (same as ingestion)
 embeddings = GoogleGenerativeAIEmbeddings(
